@@ -1,116 +1,46 @@
-import { Children, useReducer } from 'react';
-import styled from 'styled-components';
-import { useState } from 'react';
+import { useReducer } from 'react'
+import styled from 'styled-components'
+import Button from './components/Button'
+import Container from './components/Container'
+import Output from './components/Output'
+import Prev from './components/Prev'
+import Curr from './components/Curr'
+import BigBox from './components/BigBox'
+import Keys from './components/Keys'
+import reducer from './reducers/reducer'
 
-const Title = styled.h1`
-  color: white;
-`
-const Container = styled.div`
-
-    height: 100vh;
-    width: 100vw;
-    background: linear-gradient(to right,#237cca,green);
-    color: #212129;
-    display: flex; flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-`
-
-const CalculatorGrid = styled.div`
-margin: 10px;
-height: 500px;
-width: 400px;
-display: grid;
-grid-template-columns: repeat(4,1fr);
-grid-template-rows: repeat(7,1fr);
-`
-const Output = styled.div`
-  word-wrap: break-word;
-  grid-column: span 4;
-  grid-row: span 2;
-  background-color: #202224;
-  color: white;
-  direction: rtl;
-  padding:10px;
-  display: grid;
-  grid-template-rows: repeat(3,1fr);
+ 
   
+export default ()=>{
+    const [state,dispatch] = useReducer(reducer,{curr:null,prev:null,operator:undefined});
+    return (
+        <BigBox>
 
-`
-
-const Prev = styled.div`
- word-wrap: break-word;
-  color: #9dc6c6 ;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  /* background-color:teal; */
-  font-size: 18px;
-`
-const Curr = styled.div`
- word-wrap: break-word;
-display: flex;
-align-items: center;
-/* background-color: red; */
-font-size: 24px;
-width:100%;
-grid-row: span 2;
-`
-
-
-
-
-
-
-
-const Button = (props)=>{
-  return <button value={props.children} onClick={()=>props.setCurrVal(currVal + props.children)}>{props.children}</button>
-}
-const App = ()=>{
-  const [currVal,setCurrVal] = useState("curr");
-  const [prevVal,setPrevVal] = useState("prev");
-
-  const appendNum = ()=>{setCurrVal(currVal+10)};
-  const deleteNum = ()=>{setCurrVal(currVal.slice(0,-1))}
-
-
-  return (
     <Container>
-      <Title>React Calculator</Title>
-      <CalculatorGrid>
-       
-        
-       <Output>
-       <Prev>
-       {prevVal}
-       </Prev>
-       <Curr>
-       {currVal} 
-       </Curr>
-       
-       </Output>
-        <button style={{gridColumn:"span 2"}}>AC</button>
-      <button onClick={()=>deleteNum()}>DEL</button>
-        <button>/</button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>1</Button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>2</Button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>3</Button>
-        <button>+</button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>4</Button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>5</Button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>6</Button>
-        <button>-</button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>7</Button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>8</Button>
-        <Button setCurrVal={setCurrVal} currVal={currVal}>9</Button>
-        <Button>*</Button>
-        <Button>.</Button>
-      <Button setCurrVal={setCurrVal} currVal={currVal}>0</Button>
-        <button style={{gridColumn:"span 2"}}>=</button>
-      </CalculatorGrid>
+        <Output>
+            <Prev>{state.prev}</Prev>
+            <Curr>{state.curr}</Curr>
+        </Output>
+        <Keys>
+        <Button onClick={()=>dispatch({type:"CLEAR"})}>AC</Button>
+        <Button onClick={()=>dispatch({type:"DELETE"})}>DEL</Button>
+        <Button onClick={() => dispatch({ type: 'OPERATOR', value: '/' })}>/</Button>
+        <Button onClick={() => dispatch({ type: 'OPERATOR', value: '*' })}>*</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:1})}>1</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:2})}>2</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:3})}>3</Button>
+        <Button onClick={() => dispatch({ type: 'SUBT', value: '-' })}>-</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:4})}>4</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:5})}>5</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:6})}>6</Button>
+        <Button style={{gridRow: "span 2"}} onClick={() => dispatch({ type: 'OPERATOR', value: '+' })}>+</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:7})}>7</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:8})}>8</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:9})}>9</Button>
+        <Button onClick={()=>dispatch({type:"ADD_DIGIT",value:"."})}>.</Button>
+        <Button style={{gridColumn: "span 2"}}onClick={()=>dispatch({type:"ADD_DIGIT",value:0})}>0</Button>
+        <Button onClick={() => dispatch({ type: 'EQUALS' })}>=</Button>
+        </Keys>
     </Container>
-  )
+        </BigBox>)
 }
-
-export default App;
